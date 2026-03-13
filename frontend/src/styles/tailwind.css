@@ -1,0 +1,10 @@
+/* frontend/src/styles/tailwind.css */
+
+/* Button styles */
+.btn-primary {
+  @apply px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700;
+}
+
+.btn-outline {
+  @apply px-4 py-2 border rounded-md hover:bg-gray-100;
+}
