@@ -34,15 +34,31 @@ export default function AuthProvider({ children }) {
 
   // Register
   const register = async (data) => {
-    const res = await authService.register(data);
+  try {
+    const res = await authService.register({
+      name: data.name,
+      email: data.email,
+      password: data.password
+    });
+
+    alert("Registration successful! Please login.");
+
+    window.location.href = "/login";
+
     return res;
-  };
+
+  } catch (error) {
+    console.error(error);
+    alert(error.response?.data?.message || "Registration failed");
+  }
+};
 
   // Logout
   const logout = () => {
-    authService.logout();
-    setUser(null);
-  };
+  authService.logout();
+  setUser(null);
+  window.location.href = "/login";
+};
 
   return (
     <AuthContext.Provider

@@ -16,18 +16,20 @@ export default function MoodTracker() {
   }, []);
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!mood) return alert("Select a mood!");
+  e.preventDefault();
 
-    await userService.addMoodLog({ mood });
-    setMood("");
-    fetchLogs();
-  };
+  if (!mood) return alert("Select a mood!");
+
+  await userService.logMood(mood);
+
+  setMood("");
+  fetchLogs();
+};
 
   const moods = ["Happy", "Neutral", "Sad", "Stressed", "Angry", "Anxious"];
 
   return (
-    <div className="max-w-3xl mx-auto py-8 px-4">
+    <div className="max-w-3xl mx-auto py-8 px-4 bg-white/60 backdrop-blur-lg border border-white/40 rounded-xl shadow-xl">
       <h2 className="text-2xl font-semibold">Mood Tracker</h2>
 
       <form onSubmit={handleSubmit} className="mt-4 flex gap-3 items-center">
@@ -52,22 +54,41 @@ export default function MoodTracker() {
         </button>
       </form>
 
-      <div className="mt-6">
-        <h3 className="font-semibold text-lg">Mood History</h3>
-        <ul className="mt-3 space-y-2">
-          {logs.map((item) => (
-            <li
-              key={item._id}
-              className="border px-3 py-2 rounded-md flex justify-between"
-            >
-              <span>{item.mood}</span>
-              <span className="text-gray-500 text-sm">
-                {new Date(item.createdAt).toLocaleDateString()}
-              </span>
-            </li>
-          ))}
-        </ul>
+      <div className="mt-8">
+  <h3 className="text-lg font-semibold mb-4">Mood History</h3>
+
+  {logs.length === 0 && (
+    <p className="text-gray-500 text-sm">No mood entries yet.</p>
+  )}
+
+  <div className="space-y-3">
+    {logs.map((item) => (
+      <div
+        key={item._id}
+        className="flex items-center justify-between bg-white/70 backdrop-blur-md border border-white/40 rounded-lg px-4 py-3 shadow-sm hover:shadow-lg transition"
+      >
+        <div className="flex items-center gap-3">
+
+          <span className="text-xl">
+            {item.mood === "Happy" && "😊"}
+            {item.mood === "Neutral" && "😐"}
+            {item.mood === "Sad" && "😢"}
+            {item.mood === "Stressed" && "😰"}
+            {item.mood === "Angry" && "😠"}
+            {item.mood === "Anxious" && "😟"}
+          </span>
+
+          <span className="font-medium">{item.mood}</span>
+
+        </div>
+
+        <span className="text-sm text-gray-500">
+          {new Date(item.createdAt).toLocaleDateString()}
+        </span>
       </div>
+    ))}
+  </div>
+</div>
     </div>
   );
 }

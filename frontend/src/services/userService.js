@@ -17,6 +17,11 @@ const userService = {
     return res.data;
   },
 
+  getMoodLogs: async () => {
+    const res = await api.get("/user/mood");
+    return res.data;
+  },
+
   getAllUsers: async () => {
     const res = await api.get("/admin/users");
     return res.data;

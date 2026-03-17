@@ -6,10 +6,26 @@ import AuthProvider from "./context/AuthContext";
 import ChatProvider from "./context/ChatContext";
 import ThemeProvider from "./context/ThemeContext";
 import NotificationProvider from "./context/NotificationContext";
+import { useAuth } from "./hooks/useAuth";
 
-// Common UI
 import Navbar from "./components/common/Navbar";
 import Footer from "./components/common/Footer";
+
+function AppContent() {
+  const { user, logout } = useAuth();
+
+  return (
+    <BrowserRouter>
+      <Navbar user={user} onLogout={logout} />
+
+      <div className="min-h-screen">
+        <RoutesList />
+      </div>
+
+      <Footer />
+    </BrowserRouter>
+  );
+}
 
 export default function App() {
   return (
@@ -17,13 +33,7 @@ export default function App() {
       <AuthProvider>
         <ChatProvider>
           <NotificationProvider>
-            <BrowserRouter>
-              <Navbar />
-              <div className="min-h-screen pt-20">
-                <RoutesList />
-              </div>
-              <Footer />
-            </BrowserRouter>
+            <AppContent />
           </NotificationProvider>
         </ChatProvider>
       </AuthProvider>

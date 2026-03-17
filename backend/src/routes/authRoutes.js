@@ -1,13 +1,13 @@
 // backend/src/routes/userRoutes.js
 import express from "express";
-import { getProfile, updateProfile, logMood } from "../controllers/userController.js";
-import auth from "../middleware/auth.js";
+import { register, login } from "../controllers/authController.js";
 
 const router = express.Router();
 
-router.get("/profile", auth, getProfile);
-router.put("/profile", auth, updateProfile);
+// Register user
+router.post("/register", register);
 
-router.post("/mood", auth, logMood);
+// Login user
+router.post("/login", login);
 
 export default router;

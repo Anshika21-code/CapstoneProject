@@ -2,7 +2,6 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 
-// Pages
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Features from "./pages/Features";
@@ -16,15 +15,13 @@ import ChatPage from "./pages/ChatPage";
 import BlogPage from "./pages/BlogPage";
 import NotFound from "./pages/NotFound";
 
-// Auth Context
-import useAuth from "./hooks/useAuth";
+import ProtectedRoute from "./components/common/ProtectedRoute";
 
 export default function RoutesList() {
-  const { user } = useAuth();
-
   return (
     <Routes>
-      {/* Public Pages */}
+
+      {/* Public */}
       <Route path="/" element={<Home />} />
       <Route path="/about" element={<About />} />
       <Route path="/features" element={<Features />} />
@@ -35,16 +32,40 @@ export default function RoutesList() {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
 
-      {/* Protected Routes */}
-      <Route path="/dashboard" element={<UserDashboard />} />
-      <Route path="/doctor/dashboard" element={<DoctorDashboard />} />
-      <Route path="/admin" element={<AdminPanel />} />
+      {/* Protected */}
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute>
+            <UserDashboard />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/doctor/dashboard"
+        element={
+          <ProtectedRoute>
+            <DoctorDashboard />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/admin"
+        element={
+          <ProtectedRoute>
+            <AdminPanel />
+          </ProtectedRoute>
+        }
+      />
 
       {/* Chat */}
       <Route path="/chat" element={<ChatPage />} />
 
       {/* 404 */}
       <Route path="*" element={<NotFound />} />
+
     </Routes>
   );
 }

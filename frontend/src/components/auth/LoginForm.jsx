@@ -1,10 +1,11 @@
 // frontend/src/components/auth/LoginForm.jsx
 import React, { useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function LoginForm() {
   const { login, loading } = useAuth();
+  const navigate = useNavigate();
 
   const [form, setForm] = useState({
     email: "",
@@ -15,9 +16,17 @@ export default function LoginForm() {
     setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
+
+  try {
     await login(form.email, form.password);
-  };
+
+    navigate("/dashboard"); // redirect after login
+
+  } catch (error) {
+    alert(error.response?.data?.message || "Login failed");
+  }
+};
 
   return (
     <div className="max-w-md mx-auto p-6 bg-white shadow-md rounded-lg">

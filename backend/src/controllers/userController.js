@@ -39,3 +39,12 @@ export const logMood = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+export const getMoodLogs = async (req, res) => {
+  try {
+    const user = await User.findById(req.userId).populate("moodHistory");
+    res.json(user.moodHistory);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};

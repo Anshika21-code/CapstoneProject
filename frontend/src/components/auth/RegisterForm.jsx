@@ -22,7 +22,11 @@ export default function RegisterForm() {
       alert("Passwords do not match!");
       return;
     }
-    await register(form);
+    await register({
+  name: form.name,
+  email: form.email,
+  password: form.password
+});
   };
 
   return (
