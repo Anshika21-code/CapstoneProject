@@ -1,57 +1,69 @@
  // frontend/src/components/chat/ChatRoom.jsx
-import React, { useEffect, useState, useRef } from "react";
-import { useChat } from "../../hooks/useChat";
-import MessageList from "./MessageList";
-import MessageInput from "./MessageInput";
+import React, { useState } from "react";
 
-export default function ChatRoom() {
-  const { room, messages, joinRoom, socket } = useChat();
-  const [loading, setLoading] = useState(true);
-  const containerRef = useRef();
+export default function ChatRoom({ patient }) {
+  const [messages, setMessages] = useState([
+    { text: "Hello Doctor!", sender: "patient" },
+    { text: "Hi, how can I help you?", sender: "doctor" },
+  ]);
 
-  // Auto scroll on message update
-  useEffect(() => {
-    if (containerRef.current) {
-      containerRef.current.scrollTop = containerRef.current.scrollHeight;
-    }
-  }, [messages]);
+  const [input, setInput] = useState("");
 
-  // Join selected room
-  useEffect(() => {
-    if (!room) return;
-    joinRoom(room);
-    setLoading(false);
-  }, [room]);
+  const handleSend = () => {
+    if (!input.trim()) return;
 
-  if (!room) {
+    const newMsg = { text: input, sender: "doctor" };
+    setMessages([...messages, newMsg]);
+    setInput("");
+  };
+
+  if (!patient) {
     return (
-      <div className="flex-1 flex items-center justify-center text-gray-400">
-        Select a room to start chatting.
+      <div className="flex items-center justify-center h-full text-gray-400">
+        Select a patient to start chatting.
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col h-full border rounded-lg bg-white">
-      <div className="p-4 border-b">
-        <h3 className="text-lg font-semibold">Room: {room}</h3>
+    <div className="flex flex-col h-[400px]">
+      
+      {/* Header */}
+      <div className="p-3 border-b font-semibold">
+        Chat with {patient.name}
       </div>
 
       {/* Messages */}
-      <div
-        ref={containerRef}
-        className="flex-1 overflow-y-auto px-4 py-3 bg-gray-50"
-      >
-        {loading ? (
-          <p className="text-center text-gray-500 py-4">Loading messages...</p>
-        ) : (
-          <MessageList messages={messages} />
-        )}
+      <div className="flex-1 overflow-y-auto p-3 bg-gray-50 space-y-2">
+        {messages.map((msg, idx) => (
+          <div
+            key={idx}
+            className={`p-2 rounded-md w-fit ${
+              msg.sender === "doctor"
+                ? "bg-blue-100 ml-auto"
+                : "bg-green-100"
+            }`}
+          >
+            {msg.text}
+          </div>
+        ))}
       </div>
 
       {/* Input */}
-      <div className="border-t p-3">
-        <MessageInput room={room} socket={socket} />
+      <div className="p-3 border-t flex gap-2">
+        <input
+          type="text"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          placeholder="Type a message..."
+          className="flex-1 border px-3 py-2 rounded-md"
+        />
+        <button
+          onClick={handleSend}
+          className="bg-blue-600 text-white px-4 rounded-md hover:bg-blue-700"
+        >
+          Send
+        </button>
       </div>
     </div>
   );
