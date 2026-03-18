@@ -2,6 +2,9 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 
+import AppointmentBooking from "./components/doctor/AppointmentBooking";
+import DoctorProfile from "./components/doctor/DoctorProfile";
+import VideoConsultation from "./components/doctor/VideoConsultation";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Features from "./pages/Features";
@@ -50,6 +53,42 @@ export default function RoutesList() {
           </ProtectedRoute>
         }
       />
+
+      <Route
+  path="/doctors"
+  element={
+    <ProtectedRoute>
+      <DoctorDashboard />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/appointments/:id"
+  element={
+    <ProtectedRoute>
+      <AppointmentBooking />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/doctor/profile"
+  element={
+    <ProtectedRoute>
+      <DoctorProfile />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/video/:id"
+  element={
+    <ProtectedRoute>
+      <VideoConsultation />
+    </ProtectedRoute>
+  }
+/>
 
       <Route
         path="/admin"
